@@ -64,7 +64,14 @@ func main() {
 		}
 	}
 	if len(path) == 0 {
-		log.Fatal("project", project, "not found")
+		// trying to return CWD
+		dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Print(dir)
+		fmt.Fprintf(os.Stderr, "error: project %s not found\n", project)
+		os.Exit(-1)
 	}
 	fmt.Print(path)
 }
