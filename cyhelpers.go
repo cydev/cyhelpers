@@ -7,6 +7,13 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"flag"
+	"path"
+)
+
+var (
+	virtualenvCompletion = flag.Bool("v-completion", false, "virtualenv autocomplete list")
+	virtualenv = flag.Bool("v", false, "virtualenv activate file")
 )
 
 var names = [...]string{
@@ -16,6 +23,10 @@ var names = [...]string{
 }
 
 var gopath string
+
+func sCandidates(l []string) string {
+	return strings.Join(l, " ")
+}
 
 func completion(prefixes []string) string {
 	candidates := []string{}
@@ -44,10 +55,41 @@ func completion(prefixes []string) string {
 			}
 		}
 	}
-	return strings.Join(candidates, " ")
+	return sCandidates(candidates)
+}
+
+func vCompletion() string {
+	dirs, err := ioutil.ReadDir("/env")
+	if err != nil {
+		log.Fatal(err)
+	}
+	candidates := []string{}
+	for _, d := range dirs {
+		if !d.IsDir() {
+			continue
+		}
+		candidates = append(candidates, d.Name())
+	}
+	return sCandidates(candidates)
+}
+
+func vFile(candidate string) string {
+	return path.Join("/env", candidate, "bin", "activate")
+}
+
+func printAndExit(s string) {
+	fmt.Print(s)
+	os.Exit(1)
 }
 
 func main() {
+	flag.Parse()
+	if *virtualenvCompletion {
+		printAndExit(vCompletion())
+	}
+	if *virtualenv {
+		printAndExit(vFile(flag.Arg(0)))
+	}
 	var gopathExists bool
 	gopath, gopathExists = os.LookupEnv("GOPATH")
 	if !gopathExists {
