@@ -49,3 +49,30 @@ d () {
     fi
 }
 complete -F e_complete e
+
+
+bf_complete() {
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    subcommands="$(cyhelpers -b-completion .)"
+
+    if [[ ${COMP_CWORD} == 1 ]] ; then
+        COMPREPLY=($(compgen -W "${subcommands}" -- ${cur}))
+        return 0
+    fi
+}
+
+pf() {
+    go test -bench Benchmark$1 -o ${PWD##*/}.test -memprofile=mem.perf
+    go tool pprof -alloc_space ${PWD##*/}.test mem.perf
+    rm mem.perf ${PWD##*/}.test
+}
+
+pfc() {
+    go test -bench Benchmark$1 -o ${PWD##*/}.test -cpuprofile cpu.perf
+    go tool pprof ${PWD##*/}.test cpu.perf
+    rm cpu.perf ${PWD##*/}.test
+}
+
+complete -F bf_complete bf
+complete -F bf_complete pfc
