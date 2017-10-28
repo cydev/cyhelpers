@@ -24,6 +24,8 @@ var names = [...]string{
 	"cydev",
 	"ernado",
 	"arazumov",
+	"gortc",
+	"paulcamper",
 	".",
 }
 
