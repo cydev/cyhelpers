@@ -177,6 +177,8 @@ func main() {
 	candidates := []string{
 		project,
 		filepath.Join("cydev", project),
+		filepath.Join("gortc", project),
+		filepath.Join("paulcamper", project),
 		filepath.Join("ernado", project),
 		filepath.Join("arazumov", project),
 	}
