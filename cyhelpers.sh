@@ -20,6 +20,10 @@ p () {
             deactivate
         fi
     fi
+    if [[ $1 == "pc2-api" ]] ; then
+        # Special case for PaulCamper API.
+        . /home/ernado/.pc2rc
+    fi
     cd ${DIR}
 }
 
