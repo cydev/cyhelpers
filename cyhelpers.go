@@ -26,6 +26,8 @@ var names = [...]string{
 	"arazumov",
 	"gortc",
 	"paulcamper",
+	"pc",
+	"stationers-l10n",
 	".",
 }
 
